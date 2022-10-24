@@ -46,5 +46,3 @@ template ECDSAVerifyPubKeyToAddr(n, k) {
 
     addr <== pubToAddr.address;
 }
-
-component main { public [TPreComputes, U] } = ECDSAVerifyPubKeyToAddr(64, 4);
