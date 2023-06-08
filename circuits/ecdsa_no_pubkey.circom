@@ -18,7 +18,7 @@ template ECDSAVerifyNoPubkey(n, k) {
     // compute r^-1 * G
     component secprG = Secp256k1ScalarMult(n, k); 
     for (var idx = 0; idx < k; idx++) {
-        secprG.scalar[idx] <== rInv.[idx];
+        secprG.scalar[idx] <== rInv[idx];
         secprG.point[0][idx] <== generator[0][idx];
         secprG.point[1][idx] <== generator[1][idx];
     }
@@ -26,9 +26,9 @@ template ECDSAVerifyNoPubkey(n, k) {
     // compute m * r^-1 * G
     component secpmsgRG = Secp256k1ScalarMult(n, k);
     for (var idx = 0; idx < k; idx++) {
-        secpmsgRG.scalar[idx] <== msghash.[idx];
+        secpmsgRG.scalar[idx] <== msghash[idx];
         secpmsgRG.point[0][idx] <== secprG.out[0][idx];
-        secpmsgRG.point[1][idx] <== generator.out[1][idx];
+        secpmsgRG.point[1][idx] <== generator[1][idx];
     }
 
     signal computedU[2][k];
@@ -90,3 +90,5 @@ template ECDSAVerifyNoPubkey(n, k) {
         pubKey[1][i] <== pointAdder.out[1][i];
     }
 }
+
+component main { public [TPreComputes, U, msghash] } = ECDSAVerifyNoPubkey(64, 4);
