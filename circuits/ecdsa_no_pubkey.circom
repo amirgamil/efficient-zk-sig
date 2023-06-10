@@ -1,6 +1,8 @@
 
 pragma circom 2.0.6;
 include "./secp256k1_scalar_mult_cached_windowed.circom";
+//TODO: port over the secp256k circuit that does right-field arithmetic
+// use right-field in circom
 include "./circom-ecdsa-circuits/secp256k1.circom";
 include "../node_modules/circomlib/circuits/gates.circom";
 
@@ -14,8 +16,8 @@ template ECDSAVerifyNoPubkey(n, k) {
     signal input generator[2][k]; // G
     signal input rInv[k]; // r^-1
 
-    // verify U is computed correctly
-    // compute r^-1 * G
+    // // verify U is computed correctly
+    // // compute r^-1 * G
     component secprG = Secp256k1ScalarMult(n, k); 
     for (var idx = 0; idx < k; idx++) {
         secprG.scalar[idx] <== rInv[idx];
@@ -33,6 +35,7 @@ template ECDSAVerifyNoPubkey(n, k) {
 
     signal computedU[2][k];
     
+    can be removed by passing -r^-1 but this is not inducing a lot of constraints  
     // compute U = -(m * r^-1 * G)
     component xORNegator[2][k];
     for (var idx = 0; idx < k; idx++) {
